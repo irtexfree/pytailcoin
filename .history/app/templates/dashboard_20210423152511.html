@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <title>{{title}}</title>
+  </head>
+  <body>
+      <nav>
+          ...
+      </nav>
+      <main>
+        <div class="column">
+ 
+            <div class="portlet">
+              <div class="portlet-header">Feeds</div>
+              <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+            </div>
+           
+            <div class="portlet">
+              <div class="portlet-header">News</div>
+              <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+            </div>
+           
+          </div>
+           
+          <div class="column">
+           
+            <div class="portlet">
+              <div class="portlet-header">Shopping</div>
+              <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+            </div>
+           
+          </div>
+           
+          <div class="column">
+           
+            <div class="portlet">
+              <div class="portlet-header">Links</div>
+              <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+            </div>
+           
+            <div class="portlet">
+              <div class="portlet-header">Images</div>
+              <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+            </div>
+           
+          </div>
+      </main>
+
+      {{login}}
+  </body>
+
+  <footer>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+    <script>
+        $( function() {
+          $( ".column" ).sortable({
+            connectWith: ".column",
+            handle: ".portlet-header",
+            cancel: ".portlet-toggle",
+            placeholder: "portlet-placeholder ui-corner-all"
+          });
+       
+          $( ".portlet" )
+            .addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+            .find( ".portlet-header" )
+              .addClass( "ui-widget-header ui-corner-all" )
+              .prepend( "<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");
+       
+          $( ".portlet-toggle" ).on( "click", function() {
+            var icon = $( this );
+            icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
+            icon.closest( ".portlet" ).find( ".portlet-content" ).toggle();
+          });
+        } );
+        </script>
+    
+</footer>
+</html>

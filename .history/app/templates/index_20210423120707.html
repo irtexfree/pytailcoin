@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <div
+      class="absolute right-1/2 bottom-1/2 transform translate-x-1/2 translate-y-1/2"
+    >
+      <form action="/" method="POST">
+        <h1 class="text-2xl font-black mb-4">Login</h1>
+
+        <div class="flex flex-col mb-4">
+          <div class="relative">
+            <input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Login"
+              value=""
+              class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 px-4"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col mb-4">
+            <div class="relative">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Password"
+                value=""
+                class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 px-4"
+              />
+            </div>
+          </div>
+
+        </form>
+    </div>
+  </body>
+</html>

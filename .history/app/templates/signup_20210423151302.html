@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <div
+      class="absolute right-1/2 bottom-1/2 transform translate-x-1/2 translate-y-1/2 md:w-3/12 w-8/12"
+    >
+      <form action="/api/login" method="POST" class="">
+        <h1 class="text-2xl font-black mb-4">Регистрация в системе</h1>
+
+        <div class="flex flex-col mb-4">
+          <div class="relative">
+            <input
+              id="login"
+              name="login"
+              type="text"
+              placeholder="Логин"
+              value=""
+              class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 px-4"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col mb-4">
+            <div class="relative">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Пароль"
+                value=""
+                class="text-sm sm:text-base relative w-full border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 px-4"
+              />
+            </div>
+          </div>
+
+          <button class="block bg-indigo-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">Войти в систему</button>
+
+        </form>
+    </div>
+  </body>
+</html>

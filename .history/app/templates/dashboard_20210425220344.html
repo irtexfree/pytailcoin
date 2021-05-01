@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>{{title}}</title>
+  </head>
+
+  <body>
+    <main class="h-screen">
+      <nav class="shadow p-2 px-4 mb-8 bg-white">
+        <div>
+          <h4 class="text-gray-900 text-sm font-bold">Tailcoin Admin</h4>
+        </div>
+      </nav>
+
+      <div class="container mx-auto">
+        <h1 class="text-2xl font-black mb-4">Панель управления</h1>
+
+        <div class="px-1 text-gray-900 text-sm">
+          <ul class="flex">
+            <li>
+              <a href="#" class="underline font-semibold">Главная процедура</a>
+            </li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="#" class="underline font-semibold">Экраны</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li>Домашний экран</li>
+          </ul>
+        </div>
+
+        <div class="mt-12">
+          <div class="column w-4/12">
+            <div class="portlet shadow border rounded-xl p-0 m-0 bg-white">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                Чат с клиентом
+              </div>
+
+              <div
+                class="portlet-content"
+                x-data="{chat: [], chat_id: 0, typing: false, usersWhoWantHelp: false}"
+                x-on:chat-update.window="chat = $event.detail.chat; chat_id = $event.detail.chat_id;"
+              >
+                <div x-show="chat_id == '0' && chat_id == 0" class="p-0 m-0">
+                  <div class="flex flex-col my-24">
+                    <div class="grid place-items-center mx-2 my-20 sm:my-auto">
+                      <h2 class="text-xl text-gray-900 font-semibold">
+                        Ожидание
+                      </h2>
+                      <p class="text-sm text-gray-600">Ожидайте новый чат</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div x-show="chat_id != '0' && chat_id != 0">
+                  <div
+                    class="flex items-center space-x-4 p-4 overflow-y-auto max-h-96"
+                    id="chatBox"
+                  >
+                    <div class="w-full">
+                      <template x-for="chatItem in chat">
+                        <div
+                          :class="chatItem.sender.split(':')[0] === 'admin' ? 'flex justify-end mb-3': 'flex justify-start mb-3'"
+                        >
+                          <div
+                            :class="[chatItem.sender.split(':')[0] === 'admin' ? 'bg-blue-500 text-white' : 'bg-gray-100', 'py-2 px-3 rounded-md shadow text-sm float-left']"
+                          >
+                            <span x-text="chatItem.text"></span>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <form
+                    action="/api/telegram/sendMessage/<activeChatId>/<data>"
+                    method="GET"
+                    id="sendMessageForm"
+                  >
+                    <div class="m-0 px-3 py-2 text-gray-500 h-10">
+                      <small x-show="typing">Вы набираете сообщение...</small>
+                    </div>
+                    <div
+                      class="m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-t flex"
+                    >
+                      <input
+                        type="text"
+                        name="message"
+                        id="message"
+                        placeholder="Введите сообщение"
+                        class="w-full outline-none flex"
+                        x-on:input.debounce.100ms="typing = true; x_function_typing()"
+                        x-on:input.debounce.2000ms="typing = false;"
+                      />
+                      <button
+                        class="flex text-indigo-500 outline-none"
+                        type="submit"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <button
+                      class="mt-4 block bg-blue-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded text-sm w-full"
+                      x-on:click.prevent="x_function_close_current_chat()"
+                    >
+                      Закрыть чат
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column w-8/12">
+            <div class="portlet shadow border rounded-xl p-0 m-0 bg-white">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                Настройки бота
+              </div>
+
+              <div class="portlet-content">
+                <div class="p-2">
+                  <label
+                    class="flex items-center space-x-4 overflow-y-auto max-h-96"
+                  >
+                    <input
+                      type="checkbox"
+                      class="form-checkbox h-5 w-5 text-blue-600 active:ring-indigo-900 cursor-pointer"
+                      checked
+                    />
+                    <span class="ml-2 text-gray-700">Ограничить предлажения минимальной процентной ставкой</span>
+                  </label>
+
+                  <button
+                    class="mt-4 block bg-blue-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+                  >
+                    Сохранить параметры
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="portlet shadow border rounded-xl p-0 m-0 bg-white">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                История последних событий на LocalBitcoins
+              </div>
+
+              <div class="portlet-content">
+                <div>
+                  <div class="grid grid-cols-3 gap-4 p-2">
+                    <div>
+                      <h4 class="font-bold p-0 m-0">Создано объявление №17827878</h4>
+                      <small class="p-0 m-0">Lorem, ipsum dolor.</small>
+                    </div>
+                    <div>1</div>
+                    <div>1</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+
+  <footer>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+      defer
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js"
+      defer
+    ></script>
+
+    <script>
+      window.U_LOGIN = "{{login}}";
+    </script>
+
+    <style>
+      .column {
+        min-width: 170px;
+        float: left;
+        padding-bottom: 100px;
+      }
+
+      .portlet {
+        margin: 0 1em 1em 0;
+        padding: 0.3em;
+      }
+
+      .portlet-content {
+        padding: 0.4em;
+      }
+
+      .portlet-placeholder {
+        border: 1px dotted black;
+        margin: 0 1em 1em 0;
+        height: 50px;
+      }
+
+      .ui-widget.ui-widget-content {
+        border: none;
+      }
+    </style>
+  </footer>
+</html>
