@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>{{title}}</title>
+  </head>
+
+  <body>
+    <main class="h-screen">
+      <nav class="shadow p-2 px-4 mb-8 bg-white">
+        <div>
+          <h4 class="text-gray-900 text-sm font-bold">Tailcoin Admin</h4>
+        </div>
+      </nav>
+      
+      <div class="z-50 flex justify-center h-screen items-center bg-gray-500 bg-opacity-50 antialiased fixed w-screen h-screen top-0 backdrop-filter" id="modal_vue" v-if="show">
+          <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl">
+            <div
+              class="flex flex-row justify-between p-6 bg-white border-b border-gray-200 rounded-tl-lg rounded-tr-lg"
+            >
+              <p class="font-semibold text-gray-800" v-text="title"></p>
+              <svg
+                class="w-6 h-6 cursor-pointer"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                @click="show = false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </div>
+          <form @submit.prevent="submit" id="modal_data_vue">     
+           <div class="flex flex-col px-6 py-5 bg-gray-50">
+                
+                
+                    <div v-for="fluid in fluids" :key="fluid.name">
+                        <p class="mb-2 font-regular text-gray-500 text-sm" v-text="fluid.label" v-if="fluid.label"></p>
+                        <input v-if="fluid.type.split(':')[0] == 'input'" :type="fluid.type.split(':')[1]" :name="fluid.name" :placeholder="fluid.placeholder" class="outline-none focus:ring focus:ring-blue-500 p-2 px-3 mb-5 bg-white w-full border border-gray-200 rounded shadow-sm">
+                        <textarea
+                            v-if="fluid.type.split(':')[0] == 'textarea'"
+                            :type="fluid.type.split(':')[1]" 
+                           :name="fluid.name" :placeholder="fluid.placeholder" class="outline-none focus:ring focus:ring-blue-500 p-2 px-3 mb-5 bg-white w-full border border-gray-200 rounded shadow-sm"
+                          ></textarea>
+                           <select
+                            v-if="fluid.type.split(':')[0] == 'select'"
+                            :type="fluid.type.split(':')[1]" 
+                           :name="fluid.name" :placeholder="fluid.placeholder" class="outline-none focus:ring focus:ring-blue-500 p-2 px-3 w-full mb-5 bg-white border border-gray-200 rounded shadow-sm appearance-none"
+                          >
+                            <option :value="item.value" v-text="item.text" v-for="item in fluid.value" :key="fluid.value"></option>
+                            
+                          </select>
+                          <input
+                          class="inline-flex outline-none rounded-full focus:ring focus:ring-blue-500"
+                            v-if="fluid.type.split(':')[0] == 'checkbox'"
+                            :type="fluid.type.split(':')[1]" 
+                          :name="fluid.name"
+                          :id="fluid.name"
+                          :value="fluid.value"
+                        />
+                        <label v-if="fluid.type.split(':')[0] == 'checkbox'" class="inline-flex font-semibold text-gray-400" :for="fluid.name" v-text="fluid.placeholder">
+                        </label>
+                    </div>
+                
+            </div>
+            <div
+              class="flex flex-row items-center justify-between p-5 bg-white border-t border-gray-200 rounded-bl-lg rounded-br-lg"
+            >
+               <button class="px-2 py-2 text-white font-semibold bg-blue-500 rounded w-full">
+                Сохранить
+              </button>
+            </div>
+            
+            </form>
+          </div>
+        </div>
+
+      <div class="container mx-auto">
+        <h1 class="text-2xl font-black mb-4">Панель управления</h1>
+
+        <div class="px-1 text-gray-900 text-sm">
+          <ul class="flex">
+            <li>
+              <a href="#" class="underline font-semibold">Главная процедура</a>
+            </li>
+            <li><span class="mx-2">/</span></li>
+            <li><a href="#" class="underline font-semibold">Экраны</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li>Домашний экран</li>
+          </ul>
+        </div>
+
+        <div class="mt-12">
+          <div class="column w-4/12">
+            <div
+              class="portlet shadow border rounded-xl p-0 m-0 bg-white"
+              id="chat_vue"
+            >
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                Чат с клиентом
+              </div>
+
+              <div class="portlet-content">
+                <div v-if="state == 'wait_chat'" class="p-0 m-0">
+                  <div class="flex flex-col my-24">
+                    <div class="grid place-items-center mx-2 my-20 sm:my-auto">
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                    
+                      <h2 class="text-xl text-gray-900 font-semibold mb-2">
+                        Ожидание
+                      </h2>
+                      <p class="text-sm text-gray-600">Ожидайте новый чат</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div v-if="state == 'chat'">
+                  <div
+                    class="flex items-center space-x-4 p-4 overflow-y-auto max-h-96"
+                    id="chat_container"
+                  >
+                    <div class="w-full">
+                      <div
+                        v-for="message in chat"
+                        :key="message.id"
+                        :class="message.sender.split(':')[0] === 'admin' ? 'flex justify-end mb-3': 'flex justify-start mb-3'"
+                      >
+                        <div
+                          :class="[message.sender.split(':')[0] === 'admin' ? 'bg-blue-500 text-white' : 'bg-gray-100', 'py-2 px-3 rounded-md shadow text-sm float-left']"
+                        >
+                          <span v-text="message.text"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      class="m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-t flex"
+                    >
+                      <input
+                        type="text"
+                        name="message"
+                        id="message"
+                        placeholder="Введите сообщение"
+                        class="w-full outline-none flex"
+                        v-model="message"
+                        @keyup.enter="send"
+                      />
+                      <button
+                        class="flex text-indigo-500 outline-none"
+                        @click.prevent="send"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <button
+                      class="mt-4 block bg-blue-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded text-sm w-full"
+                      @click.prevent="close_chat"
+                    >
+                      Закрыть чат
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+ <div class="portlet shadow border rounded-xl p-0 m-0 bg-white">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                Заявки на обмен
+              </div>
+
+              <div class="portlet-content">
+                <div>
+                  <div class="grid grid-cols-3 gap-4 p-2">
+                    <div>
+                      <h4 class="font-bold p-0 m-0">
+                        Создано объявление #<span x-text="ad.id">...</span>
+                      </h4>
+                      <small class="p-0 m-0" x-text="ad.city"></small>
+                    </div>
+                    <div x-text="ad.price">...</div>
+                    <div x-text="ad.amount">...</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+  </div>
+
+          <div class="column w-8/12">
+            <div class="portlet shadow border rounded-xl p-0 m-0 bg-white" id="procedure_vue">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                Процедура
+              </div>
+
+              <div class="portlet-content">
+                <div class="p-2">
+                  <input type="text" v-on:keyup.down.prevent="down()" v-on:keyup.up="up()" v-on:keyup.enter="select()" v-model="search" class="p-2 px-3 mb-5 bg-white w-full border border-gray-200 rounded shadow-sm outline-none focus:ring focus:ring-blue-500" placeholder="Поиск по процедурам">
+                  
+                   <div class="flex flex-col my-12" v-if="search == ''">
+                    <div class="grid place-items-center mx-2 my-20 sm:my-auto">
+                     
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                    </svg>
+
+                     <h2 class="text-xl text-gray-900 font-semibold mb-2">
+                        Выполните поиск по процедурам
+                      </h2>
+                      <p class="text-sm  text-center text-gray-600">Чтобы исполнить нужную процедуру, <br>введите ее в поисковик</p>
+                    </div>
+                  </div>
+                  
+                  <div v-for="(item, key) in filteredList" v-else :class="['my-3 p-2 bg-white pl-4 transform transition-all', key == index ? 'border-l border-blue-500' : 'border-l scale-100']">
+                    <h4 v-text="item.item.title" class="font-semibold text-md">Название процедуры</h4>
+                    <small v-text="item.item.desc || item.item.data" class="text-sm text-gray-500">Описание процедуры</small>
+                    <button  class="block mt-2 text-blue-500 text-sm" @click="index= key; procedure(item.item)">Выполнить</button> 
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="portlet shadow border rounded-xl p-0 m-0 bg-white">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                Настройки бота
+              </div>
+
+              <div class="portlet-content">
+                <div class="p-2">
+                  <label
+                    class="flex items-center space-x-4 overflow-y-auto max-h-96"
+                  >
+                    <input
+                      type="checkbox"
+                      class="form-checkbox h-5 w-5 text-blue-600 active:ring-indigo-900 cursor-pointer"
+                      checked
+                    />
+                    <span class="ml-2 text-gray-700"
+                      >Ограничить предлажения минимальной процентной
+                      ставкой</span
+                    >
+                  </label>
+
+                  <button
+                    class="mt-4 block bg-blue-600 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+                  >
+                    Сохранить параметры
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="portlet shadow border rounded-xl p-0 m-0 bg-white" id="lb_integrate_vue">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+                
+              >
+                Интеграция LocalBitcoins
+              </div>
+
+              <div class="portlet-content">
+                <div
+
+                >
+<div class="bg-white mb-5">
+    <nav class="flex flex-col sm:flex-row">
+        <button v-for="tab in screens" @click="select = tab.value" v-text="tab.text" :class="['text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none border-b-2 font-medium', select == tab.value ? 'border-blue-500 text-blue-500' : 'border-white']">
+    </nav>
+</div>
+
+
+                <div class="flex flex-col my-12" v-if="Object.values(list.records).length < 1 && select =='records'">
+                    <div class="grid place-items-center mx-2 my-20 sm:my-auto">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                    </svg>
+
+                     <h2 class="text-xl text-gray-900 font-semibold mb-2">
+                        Записей нет
+                      </h2>
+                      <p class="text-sm  text-center text-gray-600">Ожидайте алгоритм на поиск выгодных сделок</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex flex-col my-12" v-if="Object.values(list.buys).length < 1 && select =='buys'">
+                    <div class="grid place-items-center mx-2 my-20 sm:my-auto">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                    </svg>
+
+                     <h2 class="text-xl text-gray-900 font-semibold mb-2">
+                        Покупок нет
+                      </h2>
+                      <p class="text-sm  text-center text-gray-600">Ожидайте алгоритм на поиск выгодных сделок</p>
+                    </div>
+                  </div>
+                  
+                    <div class="grid grid-cols-3 gap-4 p-2" v-for="ad in list.records" :key="ad.id"  v-if="select == 'records'">
+                      <div>
+                        <h4 class="font-bold p-0 m-0">
+                          Создано объявление #<span v-text="ad.id"></span>
+                        </h4>
+                        <small class="p-0 m-0" v-text="ad.city"></small>
+                      </div>
+                      <div v-text="ad.price"></div>
+                      <div v-text="ad.amount"></div>
+                    </div>
+                </div>
+                
+                
+                
+              </div>
+            </div>
+
+           
+            <div class="portlet shadow border rounded-xl p-0 m-0 bg-white" id="wallet_vue">
+              <div
+                class="portlet-header m-0 px-3 py-2 text-gray-900 text-sm font-semibold border-gray-100 border-b"
+              >
+                Кошельки обменника
+              </div>
+
+              <div class="portlet-content">
+                <div>
+                  <div class="grid grid-cols-3 gap-4 p-2" v-for="wallet in list" :key="wallet.key">
+                    <div>
+                      <h4 class="font-bold p-0 m-0" v-text="wallet.address"> </h4>
+                      <small class="p-0 m-0" v-text="wallet.currency"></small>
+                    </div>
+                   <div>
+                      <h4 class="font-bold p-0 m-0" v-text="wallet.value"> </h4>
+                      <small class="p-0 m-0">Объем средств на счету</small>
+                    </div>
+                  </div>
+                
+                    <button
+                      class="mt-4 block bg-gray-100 hover:bg-blue-dark text-gray-900 font-bold py-2 px-4 rounded text-sm w-full"
+                      @click="create()"
+                    >
+                      Добавить кошелек
+                    </button>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+
+  <footer>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.17/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+    <script>
+      window.U_LOGIN = "{{login}}";
+    </script>
+
+    <style>
+      .column {
+        min-width: 170px;
+        float: left;
+        padding-bottom: 100px;
+      }
+
+      .portlet {
+        margin: 0 1em 1em 0;
+        padding: 0.3em;
+      }
+
+      .portlet-content {
+        padding: 0.4em;
+      }
+
+      .portlet-placeholder {
+        border: 1px dotted black;
+        margin: 0 1em 1em 0;
+        height: 50px;
+      }
+
+      .ui-widget.ui-widget-content {
+        border: none;
+      }
+    </style>
+  </footer>
+</html>
