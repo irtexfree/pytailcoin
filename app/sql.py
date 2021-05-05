@@ -66,10 +66,24 @@ class Adventure(Model):
     provider = CharField()
     city = CharField()
     url = CharField()
+    hash = CharField()
+
+    class Meta:
+        database = db
+
+
+class ConfirmAdventure(Model):
+    id = CharField(primary_key=True)
+    contact_id = CharField()
+    created_at = CharField()
+    amount = CharField()
+    currency = CharField()
+    status = CharField()
+    hash = CharField()
 
     class Meta:
         database = db
 
 
 db.connect()
-db.create_tables([Person, Dialog, Customer, Adventure,  Wallet,  Ticket])
+db.create_tables([Person, Dialog, Customer, Adventure,  Wallet,  Ticket, ConfirmAdventure])
